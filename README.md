@@ -1,10 +1,6 @@
-# Название семестровой работы
+# Алгоритм Джарвиса (выпуклая оболочка)
 
-[![CMake](https://github.com/Algorithms-and-Data-Structures-2021/semester-work-jarvis-006/actions/workflows/cmake.yml)
-
-**_Измените status badge сверху для отображения статуса сборки вашего проекта._**
-
-`Actions > CMake > ... > Create status badge`
+[![CMake](https://github.com/Algorithms-and-Data-Structures-2021/semester-work-jarvis-006/actions/workflows/cmake.yml/badge.svg)](https://github.com/Algorithms-and-Data-Structures-2021/semester-work-jarvis-006/actions/workflows/cmake.yml)
 
 _Краткое описание семестрового проекта. Следует отразить информацию по следующим пунктам:_
 
