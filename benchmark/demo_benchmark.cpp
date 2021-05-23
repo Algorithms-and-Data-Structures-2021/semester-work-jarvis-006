@@ -13,62 +13,63 @@ using namespace std;
 using namespace itis;
 
 // Ваш путь до проекта
-const string path_to_project = "K:\\c++ projects\\semester-work-jarvis-006";
+const string path_to_project = "C:\\Users\\Mapct\\project\\Study\\semester-work-jarvis-006";
 
 // абсолютный путь до набора данных и папки проекта
 static const auto kDatasetPathAdd = path_to_project + "\\dataset\\data\\";
 
 
 //100, 1000, 5000, 10000, 25000, 50000, 100000, 300000, 600000, 1000000
-static const int kSizeDataset = 1000;
+static const int kSizeDataset = 100;
 
 
 int main() {
   // работа с набором данных
   string path = kDatasetPathAdd;
 
-  for (int i = 1; i <= 10; i++) { // для каждого из 10 наборов(папки: 01, 02, 03 и т.д.)
+  int dataset_array[10] = {100, 1000, 5000, 10000, 25000, 50000, 100000, 300000, 600000, 1000000};
 
-    auto input_file = ifstream(path + "data_" + to_string(i) + "\\" + to_string(kSizeDataset) + ".csv");
-    if (!input_file.is_open()) {
-      cout << "open " << path + "data_" + to_string(i) + "\\" + to_string(kSizeDataset) + ".csv"
-           << " error!" << endl;
-      return -1;  // если файл не открылся, выводим ошибку
-    }
+  for (int data: dataset_array) {
+    cout << "=============================== " <<"size: " << data << " ============================" << endl;
+    for(int iter = 0; iter < 10; iter++) {
+      for (int i = 1; i <= 10; i++) { // для каждого из 10 наборов(папки: 01, 02, 03 и т.д.)
+        auto input_file = ifstream(path + "data_" + to_string(i) + "\\" + to_string(data) + ".csv");
+        if (!input_file.is_open()) {
+          cout << "open " << path + "data_" + to_string(i) + "\\" + to_string(data) + ".csv"
+               << " error!" << endl;
+          return -1;  // если файл не открылся, выводим ошибку
+        }
 
-    vector<point> input_{kSizeDataset};
-    int j = 0;
-    while (!input_file.eof()) {
-      string line;
-      input_file >> line;
-      vector<int> vect;
+        vector<point> input_;
+        while (!input_file.eof()) {
+          string line;
+          input_file >> line;
 
-      std::stringstream ss(line);
-      if (line.size() == 0)
-        break;
-      for (int k; ss >> k;) {
-        vect.push_back(k);
-        if (ss.peek() == ',')
-          ss.ignore();
+          if (line.size() == 0)
+            break;
+
+          int n = line.find(",");
+
+          int x_coord = stoi(line.substr(0, n));
+          int y_coord = stoi(line.substr(n + 1));
+
+          point p = point(x_coord, y_coord);
+          input_.push_back(p);
+        }
+
+        //======================================Алгоритм=======================================================
+        auto time_point_before = chrono::steady_clock::now();
+        vector<point> ans;
+        ans = Jarvis(input_, data);
+        auto time_point_after = chrono::steady_clock::now();
+        auto time_diff = time_point_after - time_point_before;
+        long long time_elapsed_ns_search = chrono::duration_cast<chrono::nanoseconds>(time_diff).count();
+        //===================================================================================================
+        cout << time_elapsed_ns_search << "\n";
+
       }
-      input_[j].x = vect[0];
-      input_[j].y = vect[1];
-      j += 1;
     }
-    //======================================Алгоритм=======================================================
-    vector<point> ans;
-    auto time_point_before = chrono::steady_clock::now();
-
-    ans = Jarvis(input_, kSizeDataset);
-
-    auto time_point_after = chrono::steady_clock::now();
-    auto time_diff = time_point_after - time_point_before;
-    long long time_elapsed_ns_search = chrono::duration_cast<chrono::nanoseconds>(time_diff).count();
-//    cout << ans.size() << '\n';
-    //===================================================================================================
-    cout << time_elapsed_ns_search << "\n";
   }
   return 0;
 
 }
-
